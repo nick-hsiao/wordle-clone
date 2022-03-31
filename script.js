@@ -15298,10 +15298,14 @@ const alertContainer = document.querySelector("[data-alert-container")
 const guessGrid = document.querySelector("[data-guess-grid")
 const offsetFromDate = new Date(2022,0,1)
 const msOffset = Date.now() - offsetFromDate
-const dayOffset = msOffset / 1000 / 60 / 60 
+let dayOffset = msOffset / 1000 / 60 / 60 
+while(dayOffset > targetWords.length){
+  dayOffset -= targetWords.length
+}
 const targetWord = targetWords[Math.floor(dayOffset)]
 let TARGET_DICT = getLetterCount(targetWord)
 
+console.log(dayOffset)
 startInteraction()
 
 function startInteraction(){
