@@ -15501,6 +15501,3 @@ function getLetterCount(word){
     }
     return counts;
 }
-
-
-console.log(targetWord)
