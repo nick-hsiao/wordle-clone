@@ -15292,6 +15292,7 @@ const dictionary = [
   ]
 const WORD_LENGTH = 5
 const FLIP_DURATION = 500
+const DANCE_DURATION = 500
 const keyboard = document.querySelector("[data-keyboard]")
 const alertContainer = document.querySelector("[data-alert-container")
 const guessGrid = document.querySelector("[data-guess-grid")
@@ -15376,7 +15377,7 @@ function submitGuess(){
         return
     }
 
-    console.log(targetWord)
+    //console.log(targetWord)
 
     const guess = activeTiles.reduce((word,tile)=>{
         return word + tile.dataset.letter
@@ -15417,12 +15418,12 @@ function flipTiles(tile,index,array,guess){
         if(index === array.length-1){
             tile.addEventListener("transitionend",()=>{
                 startInteraction()
-                //checkWinLose(guess,array)
-            })
+                checkWinLose(guess,array)
+            },{once:true})
             
         }
 
-    })
+    },{once:true})
 }
 
 function showAlert(message,duration = 1000){
@@ -15447,5 +15448,32 @@ function shakeTiles(tiles){
         tile.addEventListener("animationend",()=>{
             tile.classList.remove("shake")
         },{once:true})
+    })
+}
+
+function checkWinLose(guess,tiles){
+    if (guess === targetWord) {
+        showAlert("YOU WON! :)", 7000)
+        danceTiles(tiles)
+        stopInteraction()
+        return
+    }
+
+    const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])")
+    if (remainingTiles.length === 0){
+        showAlert("\"" + targetWord.toUpperCase() + "\" WAS THE WORD :(",null)
+        stopInteraction()
+    }
+}
+
+function danceTiles(tiles){
+    tiles.forEach((tile,index) =>{
+        setTimeout(() => {
+            tile.classList.add("dance")
+            tile.addEventListener("animationend",()=>{
+                tile.classList.remove("dance")
+            },{once:true})
+        }, index * DANCE_DURATION / 5);
+      
     })
 }
