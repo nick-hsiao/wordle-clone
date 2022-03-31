@@ -15342,7 +15342,7 @@ function handleKeyDown(e) {
         return
     }
 
-    if(e.key.match(/[a-z]$/)){
+    if(e.key.match(/[a-zA-Z]$/)){
         pressKey(e.key)
         return
     }
