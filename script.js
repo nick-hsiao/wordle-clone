@@ -15298,8 +15298,9 @@ const alertContainer = document.querySelector("[data-alert-container")
 const guessGrid = document.querySelector("[data-guess-grid")
 const offsetFromDate = new Date(2022,0,1)
 const msOffset = Date.now() - offsetFromDate
-const dayOffset = msOffset / 1000 / 60 / 60 / 24
+const dayOffset = msOffset / 1000 / 60 / 60 
 const targetWord = targetWords[Math.floor(dayOffset)]
+let TARGET_DICT = getLetterCount(targetWord)
 
 startInteraction()
 
@@ -15384,6 +15385,10 @@ function submitGuess(){
     },"")
     //console.log(guess)
 
+    TARGET_DICT = getLetterCount(targetWord)
+    console.log(TARGET_DICT)
+    console.log(targetWord)
+
     if (!dictionary.includes(guess)){
         showAlert("NOT A REAL WORD")
         shakeTiles(activeTiles)
@@ -15395,26 +15400,33 @@ function submitGuess(){
 
 }
 
+
 function flipTiles(tile,index,array,guess){
     const letter = tile.dataset.letter
+    
     const key = keyboard.querySelector(`[data-key="${letter}"i]`)
     setTimeout(()=>{
         tile.classList.add("flip")
     }, index * FLIP_DURATION / 2)
+
+    
 
     tile.addEventListener("transitionend", ()=>{
         tile.classList.remove("flip")
         if (targetWord[index] === letter){
             tile.dataset.state = "correct"
             key.classList.add("correct")
-        } else if (targetWord.includes(letter)){
+            TARGET_DICT[letter] -= 1
+            
+        } else if (targetWord.includes(letter) && TARGET_DICT[letter] > 0 ){
             tile.dataset.state = "wrong-location"
             key.classList.add("wrong-location")
+            TARGET_DICT[letter] -= 1
         } else {
             tile.dataset.state = "wrong"
             key.classList.add("wrong")
         }
-
+        console.log(TARGET_DICT)
         if(index === array.length-1){
             tile.addEventListener("transitionend",()=>{
                 startInteraction()
@@ -15476,4 +15488,16 @@ function danceTiles(tiles){
         }, index * DANCE_DURATION / 5);
       
     })
+}
+
+function getLetterCount(word){
+    const counts = {};
+    for (const s of word) {
+        if (counts[s]) {
+        counts[s]++
+        } else {
+        counts[s] = 1
+        }
+    }
+    return counts;
 }
