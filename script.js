@@ -15299,7 +15299,7 @@ const guessGrid = document.querySelector("[data-guess-grid")
 const offsetFromDate = new Date(2022,0,1)
 const msOffset = Date.now() - offsetFromDate
 let dayOffset = msOffset / 1000 / 60 / 60 
-while(dayOffset > targetWords.length){
+while(dayOffset > targetWords.length-1){
   dayOffset -= targetWords.length
 }
 const targetWord = targetWords[Math.floor(dayOffset)]
@@ -15431,7 +15431,7 @@ function flipTiles(tile,index,array,guess){
         tile.classList.add("flip")
     }, index * FLIP_DURATION / 2)
 
-    
+    console.log(TARGET_DICT)
 
     tile.addEventListener("transitionend", ()=>{
         tile.classList.remove("flip")
@@ -15441,14 +15441,32 @@ function flipTiles(tile,index,array,guess){
             TARGET_DICT[letter] -= 1
             
         } else if (targetWord.includes(letter) && TARGET_DICT[letter] > 0 ){
+            
             tile.dataset.state = "wrong-location"
             key.classList.add("wrong-location")
             TARGET_DICT[letter] -= 1
+
+            let occurences = TARGET_DICT[letter]
+            for(let i = index+1;i<WORD_LENGTH;i++){
+              
+              if(targetWord[i] === letter && guess[i] === targetWord[i]){
+                occurences -= 1
+              }
+
+              if(occurences < 0){
+               
+                tile.dataset.state = "wrong"
+                key.classList.add("wrong")
+                break
+              }
+            }
+            
         } else {
             tile.dataset.state = "wrong"
             key.classList.add("wrong")
         }
         console.log(TARGET_DICT)
+        
         if(index === array.length-1){
             tile.addEventListener("transitionend",()=>{
                 startInteraction()
@@ -15458,6 +15476,8 @@ function flipTiles(tile,index,array,guess){
         }
 
     },{once:true})
+
+   
 }
 
 function showAlert(message,duration = 1000){
