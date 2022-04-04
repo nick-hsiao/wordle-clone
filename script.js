@@ -15304,7 +15304,7 @@ let dayOffset = msOffset / 1000 / 60 / 60
 while(dayOffset > targetWords.length-1){
   dayOffset -= targetWords.length
 }
-const targetWord = "heidi"/*targetWords[Math.floor(dayOffset)]*/
+const targetWord = targetWords[Math.floor(dayOffset)]
 let TARGET_DICT = getLetterCount(targetWord)
 
 startInteraction()
