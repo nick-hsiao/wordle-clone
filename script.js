@@ -2313,7 +2313,8 @@ const targetWords = [
     "rower",
     "artsy",
     "rural",
-    "shave"
+    "shave",
+    "heidi"
   ]
 
 const dictionary = [
@@ -15288,7 +15289,8 @@ const dictionary = [
     "rower",
     "artsy",
     "rural",
-    "shave"
+    "shave",
+    "heidi"
   ]
 const WORD_LENGTH = 5
 const FLIP_DURATION = 500
@@ -15302,10 +15304,9 @@ let dayOffset = msOffset / 1000 / 60 / 60
 while(dayOffset > targetWords.length-1){
   dayOffset -= targetWords.length
 }
-const targetWord = targetWords[Math.floor(dayOffset)]
+const targetWord = "heidi"/*targetWords[Math.floor(dayOffset)]*/
 let TARGET_DICT = getLetterCount(targetWord)
 
-console.log(dayOffset)
 startInteraction()
 
 function startInteraction(){
@@ -15346,7 +15347,7 @@ function handleKeyDown(e) {
         return
     }
     let k = e.which;
-    //console.log(k)
+    
     if (k == 20 /* Caps lock */
      || k == 16 /* Shift */
      || k == 9 /* Tab */
@@ -15400,16 +15401,12 @@ function submitGuess(){
         return
     }
 
-    //console.log(targetWord)
-
     const guess = activeTiles.reduce((word,tile)=>{
         return word + tile.dataset.letter
     },"")
-    //console.log(guess)
 
     TARGET_DICT = getLetterCount(targetWord)
-    console.log(TARGET_DICT)
-    console.log(targetWord)
+  
 
     if (!dictionary.includes(guess)){
         showAlert("NOT A REAL WORD")
@@ -15431,7 +15428,6 @@ function flipTiles(tile,index,array,guess){
         tile.classList.add("flip")
     }, index * FLIP_DURATION / 2)
 
-    console.log(TARGET_DICT)
 
     tile.addEventListener("transitionend", ()=>{
         tile.classList.remove("flip")
@@ -15465,7 +15461,6 @@ function flipTiles(tile,index,array,guess){
             tile.dataset.state = "wrong"
             key.classList.add("wrong")
         }
-        console.log(TARGET_DICT)
         
         if(index === array.length-1){
             tile.addEventListener("transitionend",()=>{
