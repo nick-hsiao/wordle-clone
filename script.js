@@ -15302,7 +15302,7 @@ let dayOffset = msOffset / 1000 / 60 / 60
 while(dayOffset > targetWords.length-1){
   dayOffset -= targetWords.length
 }
-const targetWord = targetWords[Math.floor(dayOffset)]
+let targetWord = targetWords[Math.floor(dayOffset)]
 let TARGET_DICT = getLetterCount(targetWord)
 
 startInteraction()
@@ -15535,4 +15535,16 @@ function getLetterCount(word){
         }
     }
     return counts;
+}
+
+function changeTargetWord(){
+    stopInteraction()
+    const allTiles = guessGrid.querySelectorAll()
+    allTiles.forEach(tile => resetTile(tile))
+}
+
+function resetTile(tile){
+    if (tile == null) return
+    delete lastTile.dataset.state
+    delete lastTile.dataset.letter
 }
